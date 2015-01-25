@@ -1,6 +1,9 @@
 package com.jamesrskemp.ultimatetic_tac_toe;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.util.Log;
 
@@ -42,5 +45,23 @@ public class GameActivity extends Activity {
 
 	public void restartGame() {
 		mGameFragment.restartGame();
+	}
+
+	public void reportWinner(final Tile.Owner winner) {
+		AlertDialog.Builder builder = new AlertDialog.Builder(this);
+		builder.setMessage(getString(R.string.declare_winner, winner));
+		builder.setCancelable(false);
+		builder.setPositiveButton(R.string.ok_label,
+				new DialogInterface.OnClickListener() {
+					@Override
+					public void onClick(DialogInterface dialogInterface, int i) {
+						finish();
+					}
+				});
+		final Dialog dialog = builder.create();
+		dialog.show();
+
+		// Reset the board to the initial position
+		mGameFragment.initGame();
 	}
 }

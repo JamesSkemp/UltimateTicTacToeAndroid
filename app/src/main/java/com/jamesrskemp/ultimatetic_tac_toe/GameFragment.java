@@ -72,11 +72,46 @@ public class GameFragment extends Fragment {
 			mLargeTiles[large].setView(outer);
 
 			for (int small = 0; small < 9; small++) {
-				ImageButton inner = (ImageButton) outer.findViewById
-						(mSmallIds[small]);
+				ImageButton inner = (ImageButton) outer.findViewById(mSmallIds[small]);
+				final int fLarge = large;
+				final int fSmall = small;
 				final Tile smallTile = mSmallTiles[large][small];
 				smallTile.setView(inner);
+				inner.setOnClickListener(new View.OnClickListener() {
+					@Override
+					public void onClick(View view) {
+						if (isAvailable(smallTile)) {
+							makeMove(fLarge, fSmall);
+							switchTurns();
+						}
+					}
+				});
 			}
+		}
+	}
+
+	private void switchTurns() {
+		mPlayer = mPlayer == Tile.Owner.X ? Tile.Owner.O : Tile
+				.Owner.X;
+	}
+
+	private void makeMove(int large, int small) {
+		mLastLarge = large;
+		mLastSmall = small;
+		Tile smallTile = mSmallTiles[large][small];
+		Tile largeTile = mLargeTiles[large];
+		smallTile.setOwner(mPlayer);
+		setAvailableFromLastMove(small);
+		Tile.Owner oldWinner = largeTile.getOwner();
+		Tile.Owner winner = largeTile.findWinner();
+		if (winner != oldWinner) {
+			largeTile.setOwner(winner);
+		}
+		winner = mEntireBoard.findWinner();
+		mEntireBoard.setOwner(winner);
+		updateAllTiles();
+		if (winner != Tile.Owner.NEITHER) {
+			((GameActivity)getActivity()).reportWinner(winner);
 		}
 	}
 
