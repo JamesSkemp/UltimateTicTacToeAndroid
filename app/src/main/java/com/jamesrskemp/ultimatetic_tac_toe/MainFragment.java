@@ -2,6 +2,7 @@ package com.jamesrskemp.ultimatetic_tac_toe;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.view.LayoutInflater;
@@ -35,6 +36,26 @@ public class MainFragment extends Fragment {
 				mDialog = builder.show();
 			}
 		});
+
+		View newButton = rootView.findViewById(R.id.new_button);
+		newButton.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				Intent intent = new Intent(getActivity(), GameActivity.class);
+				getActivity().startActivity(intent);
+			}
+		});
+
+		View continueButton = rootView.findViewById(R.id.continue_button);
+		continueButton.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				Intent intent = new Intent(getActivity(), GameActivity.class);
+				intent.putExtra(GameActivity.KEY_RESTORE, true);
+				getActivity().startActivity(intent);
+			}
+		});
+
 		return rootView;
 	}
 
