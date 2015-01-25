@@ -51,8 +51,7 @@ public class GameActivity extends Activity {
 		AlertDialog.Builder builder = new AlertDialog.Builder(this);
 		builder.setMessage(getString(R.string.declare_winner, winner));
 		builder.setCancelable(false);
-		builder.setPositiveButton(R.string.ok_label,
-				new DialogInterface.OnClickListener() {
+		builder.setPositiveButton(R.string.ok_label, new DialogInterface.OnClickListener() {
 					@Override
 					public void onClick(DialogInterface dialogInterface, int i) {
 						finish();

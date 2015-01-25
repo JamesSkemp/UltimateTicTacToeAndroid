@@ -9,7 +9,7 @@
 	<string name="ok_label">OK</string>
 	<string name="about_title">About Ultimate Tic-Tac-Toe</string>
 	<string name="about_text">\
-This game is based upon the example in the Fourth Edition of Hello, Android.
+This game is based upon the example in the Fourth Edition of Hello, Android.\n\
 \n\
 This game is played just like
 regular Tic Tac Toe with one difference: to win a tile
