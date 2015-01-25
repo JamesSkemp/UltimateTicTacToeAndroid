@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -64,6 +65,27 @@ public class GameFragment extends Fragment {
 		setAvailableFromLastMove(mLastSmall);
 	}
 
+	private void initViews(View rootView) {
+		mEntireBoard.setView(rootView);
+		for (int large = 0; large < 9; large++) {
+			View outer = rootView.findViewById(mLargeIds[large]);
+			mLargeTiles[large].setView(outer);
+
+			for (int small = 0; small < 9; small++) {
+				ImageButton inner = (ImageButton) outer.findViewById
+						(mSmallIds[small]);
+				final Tile smallTile = mSmallTiles[large][small];
+				smallTile.setView(inner);
+			}
+		}
+	}
+
+	public void restartGame() {
+		initGame();
+		initViews(getView());
+		updateAllTiles();
+	}
+
 	private void clearAvailable() {
 		mAvailable.clear();
 	}
@@ -102,5 +124,47 @@ public class GameFragment extends Fragment {
 				}
 			}
 		}
+	}
+
+	private void updateAllTiles() {
+		mEntireBoard.updateDrawableState();
+		for (int large = 0; large < 9; large++) {
+			mLargeTiles[large].updateDrawableState();
+			for (int small = 0; small < 9; small++) {
+				mSmallTiles[large][small].updateDrawableState();
+			}
+		}
+	}
+
+	/** Create a string containing the state of the game. */
+	public String getState() {
+		StringBuilder builder = new StringBuilder();
+		builder.append(mLastLarge);
+		builder.append(',');
+		builder.append(mLastSmall);
+		builder.append(',');
+		for (int large = 0; large < 9; large++) {
+			for (int small = 0; small < 9; small++) {
+				builder.append(mSmallTiles[large][small].getOwner().name());
+				builder.append(',');
+			}
+		}
+		return builder.toString();
+	}
+
+	/** Restore the state of the game from the given string. */
+	public void putState(String gameData) {
+		String[] fields = gameData.split(",");
+		int index = 0;
+		mLastLarge = Integer.parseInt(fields[index++]);
+		mLastSmall = Integer.parseInt(fields[index++]);
+		for (int large = 0; large < 9; large++) {
+			for (int small = 0; small < 9; small++) {
+				Tile.Owner owner = Tile.Owner.valueOf(fields[index++]);
+				mSmallTiles[large][small].setOwner(owner);
+			}
+		}
+		setAvailableFromLastMove(mLastSmall);
+		updateAllTiles();
 	}
 }
